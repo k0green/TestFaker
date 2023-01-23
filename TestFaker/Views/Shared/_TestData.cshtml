@@ -1,0 +1,26 @@
+﻿@model IEnumerable<TestFaker.Models.UserDataDisplayModel>
+@{ int i = 0; }
+@foreach (var item in Model)
+{
+    i++;
+    <tr>
+        <td>
+           @i
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Address)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Phone)
+        </td>
+    </tr>
+}

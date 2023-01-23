@@ -1,0 +1,77 @@
+﻿@model List<TestFaker.Models.UserDataDisplayModel>
+@inject IViewLocalizer Localizer
+@using Microsoft.AspNetCore.Mvc.Localization
+
+<input id="errorAmountSlider" type="range" min="0" max="10" step="0.25" class="slider" onchange="updateInput(this.value,'errorAmount');">
+<input class="slider" type="text" name="errorAmount" id="errorAmount" value="5" onchange="updateInput(this.value,'errorAmountSlider');">
+<label> Seed: </label>
+<input type="text" name="seed" id="seed" value="0">
+<button class="btn btn-default" onclick="TFun()">Random</button>
+
+<table id="anyTable" class="table">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>@Localizer["Id"]</th>
+        <th>@Localizer["First name"]</th>
+        <th>@Localizer["Last name"]</th>
+        <th>@Localizer["Address"]</th>
+        <th>@Localizer["Phone"]</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="~/js/InfinitiySroll.js"></script>
+
+    <script>
+    var seed = document.getElementById('seed').value;
+    var errorAmount = document.getElementById('errorAmountSlider').value;
+        var infinityScroll = new InfinitiySroll("anyTable", "/home/_TestData", { errorAmount: errorAmount, seed: seed });
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script>
+/*    $(document).ready(function(){
+      $(".slider").change(function(){
+        alert("The text has been changed.");
+      });
+    });*/
+    
+    function updateInput(val,id) {
+         document.getElementById(id).value = val;
+         var seed = document.getElementById('seed').value;
+         location.reload();
+         $.ajax({
+            url: "/Home/_TestData",
+            method: 'post',
+            data: { errorAmount: val, seed: seed },
+            /*success: function (data){
+                var infinityScroll = new InfinitiySroll("anyTable", "/home/_TestData", { errorAmount: val, seed: seed });
+                }*/
+                });
+         
+     }
+    </script>
+
+    <script>
+      function TFun(){
+            var seed = document.getElementById('seed').value;
+            var errorAmount = document.getElementById('errorAmountSlider').value;
+                 $.ajax({
+                         url: "/Home/_TestData",
+                         method: 'post',
+                         data: { errorsAmount: errorAmount, seed: seed }
+                                  });
+            location.reload();
+            var errorAmount = document.getElementById('errorAmountSlider').value;
+            $.ajax({
+                url: "/Home/_TestData",
+                method: 'post',
+                data: { errorsAmount: errorAmount, seed: seed }
+            });
+      }
+     </script>
+}
