@@ -2,11 +2,11 @@
 @inject IViewLocalizer Localizer
 @using Microsoft.AspNetCore.Mvc.Localization
 
-<input id="errorAmountSlider" type="range" min="0" max="10" step="0.25" class="slider" onchange="updateInput(this.value,'errorAmount');">
-<input class="slider" type="text" name="errorAmount" id="errorAmount" value="5" onchange="updateInput(this.value,'errorAmountSlider');">
+<input name="errorAmountSlider" id="errorAmountSlider" type="range" value="5" min="0" max="10" step="0.25" class="slider" onkeyup='saveValue(this);' onchange="updateInput(this.value,'errorAmount');">
+<input class="slider" type="text" name="errorAmount" id="errorAmount" value="5" onkeyup='saveValue(this);' onchange="updateInput(this.value,'errorAmountSlider');">
 <label> Seed: </label>
-<input type="text" name="seed" id="seed" value="0">
-<button class="btn btn-default" onclick="TFun()">Random</button>
+<input type="text" name="seed" id="seed" value="0" onkeyup='saveValue(this);'>
+<button id="butt" class="btn btn-default" onclick="TFun()">Random</button>
 
 <table id="anyTable" class="table">
     <thead>
@@ -34,44 +34,76 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script>
-/*    $(document).ready(function(){
-      $(".slider").change(function(){
-        alert("The text has been changed.");
-      });
-    });*/
-    
-    function updateInput(val,id) {
-         document.getElementById(id).value = val;
-         var seed = document.getElementById('seed').value;
-         location.reload();
-         $.ajax({
-            url: "/Home/_TestData",
-            method: 'post',
-            data: { errorAmount: val, seed: seed },
-            /*success: function (data){
-                var infinityScroll = new InfinitiySroll("anyTable", "/home/_TestData", { errorAmount: val, seed: seed });
-                }*/
-                });
-         
-     }
+        /*    $(document).ready(function(){
+              $(".slider").change(function(){
+                alert("The text has been changed.");
+              });
+            });*/
+
+        function updateInput(val, id) {
+            document.getElementById(id).value = val;
+            var seed = document.getElementById('seed').value;
+            location.reload();
+            $.ajax({
+                url: "/Home/_TestData",
+                method: 'post',
+                data: { errorAmount: val, seed: seed },
+            });
+
+        }
     </script>
 
     <script>
-      function TFun(){
+        function TFun() {
             var seed = document.getElementById('seed').value;
-            var errorAmount = document.getElementById('errorAmountSlider').value;
-                 $.ajax({
-                         url: "/Home/_TestData",
-                         method: 'post',
-                         data: { errorsAmount: errorAmount, seed: seed }
-                                  });
-            location.reload();
             var errorAmount = document.getElementById('errorAmountSlider').value;
             $.ajax({
                 url: "/Home/_TestData",
                 method: 'post',
                 data: { errorsAmount: errorAmount, seed: seed }
             });
-      }
-     </script>
+            location.reload();
+
+        }
+    </script>
+
+    @*<script>
+        if (window.localStorage) {
+            var elements = document.querySelectorAll('[name]');
+
+            for (var i = 0, length = elements.length; i < length; i++) {
+                (function (element) {
+                    var name = element.getAttribute('name');
+
+                    element.value = localStorage.getItem(name) || '';
+
+                    element.onkeyup = function () {
+                        localStorage.setItem(name, element.value);
+                    };
+                })(elements[i]);
+            }
+        }
+    </script>*@
+
+    <script type="text/javascript">
+        document.getElementById("seed").value = getSavedValue("seed");    // set the value to this input
+        document.getElementById("errorAmount").value = getSavedValue("errorAmount");// set the value to this input
+        document.getElementById("errorAmountSlider").value = getSavedValue("errorAmount");
+        /* Here you can add more inputs to set value. if it's saved */
+
+        //Save the value function - save it to localStorage as (ID, VALUE)
+        function saveValue(e) {
+            var id = e.id;  // get the sender's id to save it .
+            var val = e.value; // get the value.
+            localStorage.setItem(id, val);// Every time user writing something, the localStorage's value will override .
+        }
+
+        //get the saved value function - return the value of "v" from localStorage.
+        function getSavedValue(v) {
+            if (!localStorage.getItem(v)) {
+                return "";// You can change this to your defualt value.
+            }
+            return localStorage.getItem(v);
+        }
+    </script>
 }

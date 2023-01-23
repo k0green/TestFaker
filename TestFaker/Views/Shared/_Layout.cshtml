@@ -21,6 +21,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+
                     <ul class="navbar-nav flex-grow-1">
 @inject IOptions<RequestLocalizationOptions> LocalizationOptions
 
@@ -47,11 +48,20 @@
     </form>
 </div>
 
+
+
+
+
+
+
+
 @{
     ViewData["Title"] = "Home Page";
     var i = 0;
 }
                     </ul>
+
+
                 </div>
             </div>
         </nav>
@@ -68,3 +78,4 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
